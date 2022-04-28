@@ -24,7 +24,9 @@ class ImageEncryption:
         for x in range(self.__width):
             for y in range(self.__height):
                 r,g,b = self.__image.getpixel((x,y))
-        print(str(r)+", "+str(g)+", "+str(b))
+                print(str(r)+", "+str(g)+", "+str(b))
+        print("Largeur : ",self.__width,"px")
+        print("Hauteur : ",self.__height,"px")
 
-test = ImageEncryption("pomme.jpg")
+test = ImageEncryption("cipher.bmp")
 test.rgb_image()
