@@ -1,7 +1,7 @@
 from PIL import Image
 from random import randint
     
-class ImageEncryption:
+class MasquageImage:
 
 
     def chiffrer_dechiffrer(self, name_image, name_key_image, key, type):
@@ -57,5 +57,5 @@ class ImageEncryption:
             val3 = key*(val1-val2)
         return val3
     
-test = ImageEncryption()
+test = MasquageImage()
 test.chiffrer_dechiffrer("image/cipher2.bmp", "image/key2.bmp", 64, "déchiffrer")
