@@ -1,4 +1,4 @@
-from PIL import Image
+import PIL.Image
 from random import randint
 from tkinter import *
 
@@ -24,17 +24,17 @@ class ImageManipulation:
         
         self.__root.mainloop()
     
-    def chiffrer_dechiffrer_image(self, image=str(), key_image=str(), name_save=str()):
+    def chiffrer_dechiffrer_image(self, image=(), key_image=str(), name_save=str()):
         image = "images/"+image+".bmp"
         key_image = "images/"+key_image+".bmp"
-        image_open = Image.open(image)
-        key_image_open = Image.open(key_image)
+        image_open = PIL.Image.open(image)
+        key_image_open = PIL.Image.open(key_image)
         width_image = image_open.width
         height_image = image_open.height
         width_key_image = key_image_open.width
         height_key_image = key_image_open.height
         if width_image == width_key_image and height_image == height_key_image:
-            new_image = Image.new(mode="RGB", size=(width_image, height_image))
+            new_image = PIL.Image.new(mode="RGB", size=(width_image, height_image))
             new_image_load = new_image.load()
             pixel_count = 0
             for x in range(width_image):
@@ -49,7 +49,7 @@ class ImageManipulation:
                 
     def create_key_image(self, width=int(), height=int(), name_save=str()):
         width, height = abs(width), abs(height)
-        new_image = Image.new(mode="RGB", size=(width, height))
+        new_image = PIL.Image.new(mode="RGB", size=(width, height))
         new_image_load = new_image.load()
         pixel_count = 0
         for x in range(width):
@@ -63,14 +63,14 @@ class ImageManipulation:
         key = abs(key)
         image = "images/"+image+".bmp"
         key_image = "images/"+key_image+".bmp"
-        image_open = Image.open(image)
-        key_image_open = Image.open(key_image)
+        image_open = PIL.Image.open(image)
+        key_image_open = PIL.Image.open(key_image)
         width_image = image_open.width
         height_image = image_open.height
         width_key_image = key_image_open.width
         height_key_image = key_image_open.height
         if width_image == width_key_image and height_image == height_key_image:
-            new_image = Image.new(mode="RGB", size=(width_image, height_image))
+            new_image = PIL.Image.new(mode="RGB", size=(width_image, height_image))
             new_image_load = new_image.load()
             pixel_count = 0
             for x in range(width_image):
@@ -84,11 +84,11 @@ class ImageManipulation:
             new_image.save("images/"+name_save+".bmp")
     
     def algo(self, action=str(), val1=int(), val2=int(), key=int()):
-        if action == "chiffrer":
+        if action == "masquer":
             val3 = round(val2+1/key*val1)
             if val3 > 255:
                 val3 = 255
-        elif action == "dechiffrer":
+        elif action == "demasquer":
             val3 = key*(val1-val2)
         return val3
     
@@ -96,7 +96,7 @@ class ImageManipulation:
         chain_bin = ""
         i = 0
         image = "images/"+image+".bmp"
-        image_open = Image.open(image)
+        image_open = PIL.Image.open(image)
         image_load = image_open.load()
         height = image_open.height
         width = image_open.width
@@ -117,8 +117,8 @@ class ImageManipulation:
                             for z in range(len(rgb)):
                                 if i < len(chain_bin):
                                     rgb[z] += int(self.str_to_bin(chr(rgb[z]))[-1])^int(chain_bin[i])
-                                i += 1
                                 print("Chargement: ("+str(i)+"/"+str(len(chain_bin))+")")
+                                i += 1
                             image_load[x, y] = tuple(rgb)
             image_open.save("images/"+name_save+".bmp")
                 
@@ -132,7 +132,7 @@ class ImageManipulation:
         
     def demasquer_texte(self, image=str()):
         image = "images/"+image+".bmp"
-        image_open = Image.open(image)
+        image_open = PIL.Image.open(image)
         width = image_open.width
         height = image_open.height
         chain_bin = ""
@@ -164,4 +164,4 @@ class ImageManipulation:
             y += 8
         return texte
     
-ImageManipulation(1440, 900)
+test = ImageManipulation(1440, 900)
