@@ -1,3 +1,4 @@
+from tkinter.filedialog import *
 import PIL.Image
 from random import randint
 from tkinter import *
@@ -6,23 +7,43 @@ class ImageManipulation:
     
     def __init__(self, screen_width, screen_height):
         
-        self.__root = Tk(className="1ARIT")
+        font = ("Helvetica", 30, "bold")
+        
+        self.__root = Tk(className="Manipulation d'image")
         self.__root.geometry(str(screen_width)+"x"+str(screen_height))
-        self.__root.attributes('-fullscreen', True)
         
-        self.__canvas = Canvas(self.__root, width=screen_width, height=screen_height, highlightthickness=0, bg="red")
-        self.__canvas.place(x=screen_width/2, y=screen_height/2, anchor="center")
+        self.__canvas = Canvas(self.__root, width=screen_width, height=screen_height, highlightthickness=0, bg="white").place(x=screen_width*0.5, y=screen_height*0.5, anchor="center")
+        self.__button_chiffrement_image = Button(self.__root, command=lambda:self.page(self.__page_chiffrement_image), text="Chiffrement image", width=20, pady=50, padx=75, font=font, fg="black", bg="white", highlightthickness=5, highlightbackground="black")
+        self.__button_masquage_image = Button(self.__root, command=lambda:self.page(self.__page_masquage_image), text="Masquage image", width=20, pady=50, padx=75, font=font, fg="black", bg="white", highlightthickness=5, highlightbackground="black")
+        self.__button_masquage_texte = Button(self.__root, command=lambda:self.page(self.__page_masquage_texte), text="Masquage texte", width=20, pady=50, padx=75, font=font, fg="black", bg="white", highlightthickness=5, highlightbackground="black")
+        self.__button_back = Button(self.__root, command=lambda:self.page(self.__page_back), text="Retour", width=6, pady=2, padx=2, font=font, fg="black", bg="white", highlightthickness=5, highlightbackground="black")
+        self.__button_avant = Button(self.__root, text="Avant", width=6, pady=2, padx=2, font=font, fg="black", bg="white", highlightthickness=5, highlightbackground="black")
+
+        self.__button_chiffrement_image_p = (screen_width*0.5, screen_height*0.25)
+        self.__button_masquage_image_p = (screen_width*0.5, screen_height*0.5)
+        self.__button_masquage_texte_p = (screen_width*0.5, screen_height*0.75)
+        self.__button_back_p = (screen_width*0.1, screen_height*0.1)
+        self.__button_avant_p = (screen_width*0.9, screen_height*0.1)
         
-        self.__button_chiffrement_image = Button(self.__root, text="Chiffrement image", width=20, pady=50, padx=75, highlightbackground="black", font=("Helvetica", 30, "bold"))
-        self.__button_chiffrement_image.place(x=screen_width*0.5, y=screen_height*0.25, anchor="center")
+        self.__page_masquage_texte = [(self.__button_back, self.__button_avant), (self.__button_back_p, self.__button_avant_p)]
+        self.__page_masquage_image = [(self.__button_back, self.__button_avant), (self.__button_back_p, self.__button_avant_p)]
+        self.__page_chiffrement_image = [(self.__button_back, self.__button_avant), (self.__button_back_p, self.__button_avant_p)]
+        self.__page_accueil = [(self.__button_chiffrement_image, self.__button_masquage_image, self.__button_masquage_texte), (self.__button_chiffrement_image_p, self.__button_masquage_image_p, self.__button_masquage_texte_p)]
         
-        self.__button_masquage_image = Button(self.__root, text="Masquage image", width=20, pady=50, padx=75, highlightbackground="black", font=("Helvetica", 30, "bold"))
-        self.__button_masquage_image.place(x=screen_width*0.5, y=screen_height*0.50, anchor="center")
-        
-        self.__button_masquage_texte = Button(self.__root, text="Masquage texte", width=20, pady=50, padx=75, highlightbackground="black", font=("Helvetica", 30, "bold"))
-        self.__button_masquage_texte.place(x=screen_width*0.5, y=screen_height*0.75, anchor="center")
-        
+        self.__page_back = None
+        self.__page_actuel = self.__page_accueil
+        self.page(self.__page_actuel)
+        self.open_file()
         self.__root.mainloop()
+    
+    def page(self, page):
+        self.__page_back = self.__page_actuel
+        for i in range(len(self.__page_actuel[0])):
+            self.__page_actuel[0][i].place_forget()
+        for i in range(len(page[0])):
+            page[0][i].place(x=page[1][i][0], y=page[1][i][1], anchor="center")
+        self.__page_actuel = page
+        self.__root.update()
     
     def chiffrer_dechiffrer_image(self, image=(), key_image=str(), name_save=str()):
         image = "images/"+image+".bmp"
@@ -164,4 +185,7 @@ class ImageManipulation:
             y += 8
         return texte
     
-test = ImageManipulation(1440, 900)
+    def open_file(self):
+        return askopenfilename(defaultextension=".bmp", title="Choix de l'image")
+        
+test = ImageManipulation(400, 400)
