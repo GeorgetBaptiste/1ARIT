@@ -201,9 +201,9 @@ class ImageManipulation:
                     else:
                         chain_bin += "0"
                     pixel_count += 1
-                    if round(pixel_count*100/(width*height*3)) > save:
-                        save = round(pixel_count*100/(width*height))
-                        self.__progressbar['value'] = save
+                if round(pixel_count*100/(width*height)) > save:
+                    save = round(pixel_count*100/(width*height))
+                    self.__progressbar['value'] = save
         self.__entry.delete(0)
         self.__entry.insert(0, self.bin_to_str(chain_bin))
                         
