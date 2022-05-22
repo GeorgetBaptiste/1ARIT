@@ -27,12 +27,12 @@ class ImageManipulation:
         self.__button_chiffrer = Button(self.__root, command=lambda:self.create_thread(self.chiffrer_dechiffrer_image, (self.open_file("Choix de l'image"), self.open_file("Choix de l'image clé"), self.save_file("Où sauvegarder l'image"))), text="Chiffrer image", width=20, pady=5, padx=10, font=font, fg="black", bg="white", highlightthickness=0, highlightbackground="black")
         self.__button_dechiffrer = Button(self.__root, command=lambda:self.create_thread(self.chiffrer_dechiffrer_image, (self.open_file("Choix de l'image"), self.open_file("Choix de l'image clé"), self.save_file("Où sauvegarder l'image"))), text="Dechiffrer image", width=20, pady=5, padx=10, font=font, fg="black", bg="white", highlightthickness=0, highlightbackground="black")
         self.__entry = Entry(self.__root, width=24, font=font, fg="black", bg="white", highlightthickness=0, highlightbackground="black")
-        self.__button_masquer_image = Button(self.__root, command=lambda: self.create_thread(self.masquer_demasquer_image, (self.open_file("Choix de l'image"), self.open_file("Choix de l'image clé"), int(self.get_entry()), "masquer", self.save_file("Où sauvegarder l'image"))), text="Masquer image", width=20, pady=5, padx=10, font=font, fg="black", bg="white", highlightthickness=0, highlightbackground="black")
-        self.__button_demasquer_image = Button(self.__root, command=lambda: self.create_thread(self.masquer_demasquer_image, (self.open_file("Choix de l'image"), self.open_file("Choix de l'image clé"), int(self.get_entry()), "demasquer", self.save_file("Où sauvegarder l'image"))), text="Demasquer image", width=20, pady=5, padx=10, font=font, fg="black", bg="white", highlightthickness=0, highlightbackground="black")
-        self.__button_masquer_texte = Button(self.__root, command=lambda: self.create_thread(self.masquer_texte, (self.open_file("Choix de l'image"), self.get_entry(), self.save_file("Où sauvegarder l'image"))), text="Masquer texte", width=20, pady=5, padx=10, font=font, fg="black", bg="white", highlightthickness=0, highlightbackground="black")
+        self.__button_masquer_image = Button(self.__root, command=lambda: self.create_thread(self.masquer_demasquer_image, (self.open_file("Choix de l'image"), self.open_file("Choix de l'image clé"), int(self.__entry.get()), "masquer", self.save_file("Où sauvegarder l'image"))), text="Masquer image", width=20, pady=5, padx=10, font=font, fg="black", bg="white", highlightthickness=0, highlightbackground="black")
+        self.__button_demasquer_image = Button(self.__root, command=lambda: self.create_thread(self.masquer_demasquer_image, (self.open_file("Choix de l'image"), self.open_file("Choix de l'image clé"), int(self.__entry.get()), "demasquer", self.save_file("Où sauvegarder l'image"))), text="Demasquer image", width=20, pady=5, padx=10, font=font, fg="black", bg="white", highlightthickness=0, highlightbackground="black")
+        self.__button_masquer_texte = Button(self.__root, command=lambda: self.create_thread(self.masquer_texte, (self.open_file("Choix de l'image"), self.__entry.get(), self.save_file("Où sauvegarder l'image"))), text="Masquer texte", width=20, pady=5, padx=10, font=font, fg="black", bg="white", highlightthickness=0, highlightbackground="black")
         self.__button_demasquer_texte = Button(self.__root, command=lambda: self.create_thread(self.demasquer_texte, [self.open_file("Choix de l'image")]), text="Demasquer texte", width=20, pady=5, padx=10, font=font, fg="black", bg="white", highlightthickness=0, highlightbackground="black")
         self.__progressbar = ttk.Progressbar(self.__root, style="red.Horizontal.TProgressbar", orient="horizontal", length=300, mode="determinate", maximum=100, value=0)
-        self.__button_create_key = Button(self.__root, command=lambda: self.create_thread(self.create_key_image, (int(self.get_entry()[0:4]), int(self.get_entry()[5:9]), self.save_file("Où sauvegarder l'image"))), text="Créer une image clé", width=20, pady=5, padx=10, font=font, fg="black", bg="white", highlightthickness=0, highlightbackground="black")
+        self.__button_create_key = Button(self.__root, command=lambda: self.create_thread(self.create_key_image, (int(self.get_width_height()[0]), int(self.get_width_height()[1]), self.save_file("Où sauvegarder l'image"))), text="Créer une image clé", width=20, pady=5, padx=10, font=font, fg="black", bg="white", highlightthickness=0, highlightbackground="black")
 
         self.__button_chiffrement_image_page_p = (screen_width*0.5, screen_height*0.25)
         self.__button_masquage_image_page_p = (screen_width*0.5, screen_height*0.5)
@@ -108,6 +108,13 @@ class ImageManipulation:
                     save = round(pixel_count*100/(width*height))
                     self.__progressbar['value'] = save
         new_image.save(name_save)
+        
+    def get_width_height(self):
+        text = self.__entry.get()
+        i=0
+        while text[i] != "x":
+            i+=1
+        return text[0:i], text[i+1:len(text)]
     
     def masquer_demasquer_image(self, image=str(), key_image=str(), key=int(), action=str(), name_save=str()):
         key = abs(key)
@@ -228,9 +235,6 @@ class ImageManipulation:
     
     def save_file(self, name):
         return asksaveasfilename(defaultextension='.bmp', filetypes=[("Fichier Bitmap", '*.bmp')],title=name)
-    
-    def get_entry(self):
-        return self.__entry.get()
     
     def create_thread(self, func, arg):
         thread = threading.Thread(target=func, args=arg)
