@@ -240,4 +240,4 @@ class ImageManipulation:
         thread = threading.Thread(target=func, args=arg)
         thread.start()
         
-test = ImageManipulation(400, 400)
+test = ImageManipulation(500, 600)
